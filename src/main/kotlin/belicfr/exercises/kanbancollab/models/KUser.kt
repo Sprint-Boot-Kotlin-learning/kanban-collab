@@ -8,18 +8,27 @@ import jakarta.persistence.Id
 import org.mindrot.jbcrypt.BCrypt
 
 @Entity
-class KUser(@Id @GeneratedValue val id: Long?,
+class KUser(@Id @GeneratedValue val id: Long? = null,
             val firstname: String,
             val lastname: String,
             val login: Username,
             val email: EmailAddress,
             val password: Password) {
 
+    companion object {
+        const val LOGIN_ALREADY_USED_ERROR: String
+            = "This login is already used."
+    }
+
     @Embeddable
     data class Username(val username: String) {
         companion object {
-            private const val USERNAME_MIN_LENGTH = 3
-            private const val USERNAME_MAX_LENGTH = 15
+            private const val USERNAME_MIN_LENGTH: Int = 3
+            private const val USERNAME_MAX_LENGTH: Int = 15
+
+            const val USERNAME_LENGTH_ERROR: String
+                = "The username must contains between $USERNAME_MIN_LENGTH " +
+                  "and $USERNAME_MAX_LENGTH."
 
             fun isValidUsername(username: String): Boolean {
                 // TODO: verify if username already exists!!
@@ -33,9 +42,7 @@ class KUser(@Id @GeneratedValue val id: Long?,
 
         init {
             if (username.length !in USERNAME_MIN_LENGTH..USERNAME_MAX_LENGTH) {
-                throw IllegalArgumentException(
-                    "The username must contains between $USERNAME_MIN_LENGTH " +
-                    "and $USERNAME_MAX_LENGTH.")
+                throw IllegalArgumentException(USERNAME_LENGTH_ERROR)
             }
         }
     }
@@ -43,6 +50,9 @@ class KUser(@Id @GeneratedValue val id: Long?,
     @Embeddable
     data class EmailAddress(val address: String) {
         companion object {
+            const val INVALID_EMAIL_ADDRESS_ERROR
+                = "The email address is invalid."
+
             fun isValidAddress(address: String): Boolean {
                 val emailAddressRegex: Regex = Regex("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}\$")
 
