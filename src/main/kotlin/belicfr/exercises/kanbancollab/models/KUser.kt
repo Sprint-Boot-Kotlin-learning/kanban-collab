@@ -1,16 +1,17 @@
 package belicfr.exercises.kanbancollab.models
 
+import belicfr.exercises.kanbancollab.models.repositories.UserRepository
 import jakarta.persistence.Embeddable
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
-import org.springframework.security.crypto.bcrypt.BCrypt
+import org.mindrot.jbcrypt.BCrypt
 
 @Entity
-class User(@Id @GeneratedValue val id: Long?,
-           val name: Username,
-           val email: EmailAddress,
-           val password: Password
+class KUser(@Id @GeneratedValue val id: Long?,
+            val name: Username,
+            val email: EmailAddress,
+            val password: Password
 ) {
 
     @Embeddable
