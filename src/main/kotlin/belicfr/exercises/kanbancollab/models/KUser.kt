@@ -9,10 +9,11 @@ import org.mindrot.jbcrypt.BCrypt
 
 @Entity
 class KUser(@Id @GeneratedValue val id: Long?,
-            val name: Username,
+            val firstname: String,
+            val lastname: String,
+            val login: Username,
             val email: EmailAddress,
-            val password: Password
-) {
+            val password: Password) {
 
     @Embeddable
     data class Username(val username: String) {
@@ -27,6 +28,14 @@ class KUser(@Id @GeneratedValue val id: Long?,
                 //     MIN..MAX
                 // to exclude MIN and MAX, use following pattern:
                 //     (MIN + 1) until MAX
+            }
+        }
+
+        init {
+            if (username.length !in USERNAME_MIN_LENGTH..USERNAME_MAX_LENGTH) {
+                throw IllegalArgumentException(
+                    "The username must contains between $USERNAME_MIN_LENGTH " +
+                    "and $USERNAME_MAX_LENGTH.")
             }
         }
     }
