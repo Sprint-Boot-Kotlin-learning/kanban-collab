@@ -12,3 +12,21 @@
 body {
     overflow-x: hidden;
 }
+
+.error {
+    border: solid 1px red;
+
+    padding: 10px;
+
+    color: red;
+
+    background: rgba(255 0 0 / .05);
+
+    margin-bottom: 20px;
+}
+
+.error__title {
+    margin-bottom: 5px;
+
+    font-size: 1.7rem;
+}
