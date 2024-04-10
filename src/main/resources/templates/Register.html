@@ -1,0 +1,62 @@
+<div th:replace="/components/views/Header :: header('Create your account!', 'auth')"></div>
+<div th:replace="/components/views/Header :: #app"></div>
+
+<div class="form-container">
+    <h1 class="form-container__title">
+        Create an account
+    </h1>
+
+    <form class="form-container__form" action="auth/login" method="post">
+        <label for="firstname">
+            <p>
+                Firstname:
+            </p>
+
+            <input class="large"
+                   type="text"
+                   name="firstname"
+                   id="firstname" />
+        </label>
+
+        <label for="lastname">
+            <p>
+                Lastname:
+            </p>
+
+            <input class="large"
+                   type="text"
+                   name="lastname"
+                   id="lastname" />
+        </label>
+
+        <label for="login">
+            <p>
+                Login:
+            </p>
+
+            <input class="large"
+                   type="text"
+                   name="login"
+                   id="login" />
+        </label>
+
+        <label for="password">
+            <p>
+                Password:
+            </p>
+
+            <input class="large"
+                   type="password"
+                   name="password"
+                   id="password" />
+        </label>
+
+        <div class="form-container__form__actions">
+            <button class="button-primary" type="submit">
+                Log in
+            </button>
+        </div>
+    </form>
+</div>
+
+<div th:replace="/components/views/Footer"></div>
