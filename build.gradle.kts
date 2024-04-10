@@ -27,12 +27,9 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("com.h2database:h2")
-
-	implementation("org.springframework.boot:spring-boot-starter-security")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testImplementation("org.springframework.security:spring-security-test")
 
-	implementation("org.mindrot:jbcrypt")
+	implementation("org.mindrot:jbcrypt:0.4")
 }
 
 tasks.withType<KotlinCompile> {
