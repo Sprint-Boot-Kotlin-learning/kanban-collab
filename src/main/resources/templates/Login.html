@@ -1,0 +1,46 @@
+<div th:replace="/components/views/Header :: header('Log in with your account!', 'auth')"></div>
+<div th:replace="/components/views/Header :: #app"></div>
+
+<div class="form-container">
+    <h1 class="form-container__title">
+        Log in
+    </h1>
+
+    <form class="form-container__form" action="auth/login" method="post">
+        <label for="login">
+            <p>
+                Login:
+            </p>
+
+            <input class="large"
+                   type="text"
+                   name="login"
+                   id="login" />
+        </label>
+
+        <label for="password">
+            <p>
+                Password:
+            </p>
+
+            <input class="large"
+                   type="password"
+                   name="password"
+                   id="password" />
+        </label>
+
+        <div class="form-container__form__actions">
+            <button class="button-primary" type="submit">
+                Log in
+            </button>
+
+            <a href="/auth/register">
+                <button class="button-secondary" type="button">
+                    Create an account
+                </button>
+            </a>
+        </div>
+    </form>
+</div>
+
+<div th:replace="/components/views/Footer"></div>
