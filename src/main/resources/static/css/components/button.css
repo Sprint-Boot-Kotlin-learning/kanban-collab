@@ -1,0 +1,44 @@
+:root {
+    --button-primary-background: #009dff;
+    --button-primary-color: white;
+
+    --button-secondary-background: #E6E6E6;
+    --button-secondary-color: black;
+
+    --button-default-background: var(--button-secondary-background);
+    --button-default-color: var(--button-secondary-color);
+}
+
+button {
+    border: none;
+    border-radius: 5px;
+
+    background: var(--button-default-background);
+
+    color: var(--button-default-color);
+    font-weight: 700;
+
+    padding: 10px 20px;
+
+    transition: all .25s;
+}
+button:hover {
+    opacity: .7;
+
+    cursor: pointer;
+}
+button:active {
+    scale: .9;
+}
+
+button.button-primary {
+    background: var(--button-primary-background);
+
+    color: var(--button-primary-color);
+}
+
+button.button-secondary {
+    background: var(--button-secondary-background);
+
+    color: var(--button-secondary-color);
+}

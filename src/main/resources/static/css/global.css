@@ -1,0 +1,14 @@
+@import "components/form.css";
+@import "components/button.css";
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+    font-family: "Montserrat", sans-serif;
+}
+
+body {
+    overflow-x: hidden;
+}

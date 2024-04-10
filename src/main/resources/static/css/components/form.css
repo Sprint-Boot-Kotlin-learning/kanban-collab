@@ -1,0 +1,18 @@
+label > p {
+    font-size: .8rem;
+    font-weight: 600;
+}
+
+input,
+select,
+textarea {
+    border: solid 1px #E6E6E6;
+    border-radius: 5px;
+
+    padding: 10px;
+}
+
+input.large,
+select.large {
+    width: 100%;
+}
