@@ -1,0 +1,80 @@
+@import "global.css";
+
+#app {
+    width: 100%;
+
+    padding: 50px;
+}
+
+header.board__header {
+    margin-bottom: 50px;
+}
+
+h1.header__user-name {
+    font-size: 3rem;
+}
+
+section.board__your-projects {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.your-projects__section-title {
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 1.7rem;
+
+    grid-column: 1 / -1;
+
+    margin-bottom: 10px;
+}
+
+.your-projects__project-box {
+    border: solid 1px #E6E6E6;
+    border-radius: 10px;
+
+    padding: 10px;
+}
+
+h3.project-box__title {
+    font-size: 1.2rem;
+    font-weight: 700;
+
+    margin-bottom: 5px;
+}
+
+.project-box__author-container {
+    display: flex;
+    column-gap: 5px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.author-container__pictures-container {
+    display: flex;
+
+    flex: none;
+}
+
+.pictures-container__picture {
+    width: 15px;
+    height: 15px;
+
+    border: solid 1px white;
+    border-radius: 999px;
+
+    background: red;
+
+    flex: none;
+}
+.pictures-container__picture:not(:first-child) {
+    margin-left: -7px;
+}
+
+.author-container__username {
+    font-weight: 600;
+    font-size: .7rem;
+
+    flex: none;
+}

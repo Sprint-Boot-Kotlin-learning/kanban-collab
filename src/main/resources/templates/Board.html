@@ -1,0 +1,47 @@
+<div th:replace="/components/views/Header :: header(${user.login} + ' board', 'board')"></div>
+<div th:replace="/components/views/Header :: #app"></div>
+
+<header class="board__header">
+    <h1 class="header__user-name"
+        th:text="@{ 'Hello, ' + ${user.firstname} + ' ' +  ${user.lastname} + '!' }">
+
+        user.name
+    </h1>
+</header>
+
+<section id="your_projects"
+         class="board__your-projects">
+
+    <h2 class="your-projects__section-title">
+        Your projects
+    </h2>
+
+    <a th:href="@{ '/board/project/' + ${project.token} }"
+       th:each="project: ${projects}">
+
+        <div class="your-projects__project-box">
+            <h3 class="project-box__title"
+                th:text="${project.getName()}">
+
+                project.title
+            </h3>
+
+            <div class="project-box__author-container">
+                <div class="author-container__pictures-container">
+                    <div class="pictures-container__picture"
+                         th:each="member: ${project.getSomeMembers(3)}"></div>
+                </div>
+
+                <div class="author-container__username"
+                     th:text="${#lists.size(project.members) > 1
+                                    ? #lists.size(project.members) + ' members'
+                                    : user.login}">
+
+                    project.members
+                </div>
+            </div>
+        </div>
+    </a>
+</section>
+
+<div th:replace="/components/views/Footer"></div>
