@@ -54,9 +54,16 @@ class Configuration {
             position = 1,
             table = table1)
 
+        val list2: KList = KList(
+            name = "Todo",
+            position = 2,
+            table = table1)
+
         listRepository.save(list1)
+        listRepository.save(list2)
 
         table1.lists.add(list1)
+        table1.lists.add(list2)
         tableRepository.save(table1)
 
         val card1: KCard = KCard(
@@ -71,12 +78,22 @@ class Configuration {
             contributors = mutableSetOf(),
             list = list1)
 
+        val card3: KCard = KCard(
+            title = "Create index view",
+            description = "The default view.",
+            contributors = mutableSetOf(),
+            list = list2)
+
         cardRepository.save(card1)
         cardRepository.save(card2)
+        cardRepository.save(card3)
 
         list1.cards.add(card1)
         list1.cards.add(card2)
         listRepository.save(list1)
+
+        list2.cards.add(card3)
+        listRepository.save(list2)
 
         listRepository.flush()
         cardRepository.flush()
