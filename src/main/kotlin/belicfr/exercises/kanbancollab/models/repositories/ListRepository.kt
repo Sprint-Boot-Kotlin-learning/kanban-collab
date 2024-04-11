@@ -13,4 +13,6 @@ interface ListRepository: JpaRepository<KList, Long> {
 
     fun countAllByTable(table: KTable): Int
 
+    fun findAllByPositionIsGreaterThanEqualAndIdIsNot(position: Int, id: Long): List<KList>
+
 }
