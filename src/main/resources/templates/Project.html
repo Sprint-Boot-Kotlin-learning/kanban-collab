@@ -1,0 +1,94 @@
+<div th:replace="/components/views/Header :: header(${project.name}, 'board')"></div>
+<div th:replace="/components/views/Header :: #app"></div>
+
+<header class="project__header">
+    <h1 class="header__project-name"
+        th:text="${project.getName()}">
+
+        project.name
+    </h1>
+</header>
+
+<section id="project_lists" class="project__lists-container">
+    <div class="lists-container__list"
+         th:each="list: ${orderedLists}">
+
+        <header class="list__list-header">
+            <h2 class="list-header__title"
+               th:text="${list.getName()}">
+
+                list.title
+            </h2>
+        </header>
+
+        <div class="list__list-content">
+            <a href="#"
+               th:each="card: ${list.getCards()}">
+
+                <div class="list-content__card">
+                    <h3 class="card__title"
+                        th:text="${card.getTitle()}">
+
+                        card.title
+                    </h3>
+
+                    <p class="card__description"
+                       th:text="${card.getDescription()}">
+
+                        card.description
+                    </p>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="lists-container__new-list-container">
+        <header class="new-list-container__list-header">
+            <h2 class="list-header__title">
+                Create a list
+            </h2>
+        </header>
+
+        <div class="new-list-container__list-content">
+            <form class="list-content__new-list-form" action="" method="post">
+                <label for="name">
+                    <p>
+                        Name:
+                    </p>
+
+                    <input id="name"
+                           type="text"
+                           name="name" />
+                </label>
+
+                <label for="position">
+                    <p>
+                        Position:
+                    </p>
+
+                    <select name="position" id="position">
+                        <optgroup label="Choose an index:">
+                            <option value="1">
+                                First of all
+                            </option>
+
+                            <option th:value="${list.getPosition() + 1}"
+                                    th:each="list: ${orderedLists}"
+                                    th:text="@{ 'After ' + ${list.getName()} }"></option>
+                        </optgroup>
+                    </select>
+                </label>
+
+                <div class="new-list-form__actions">
+                    <button class="button-primary"
+                            type="submit">
+
+                        Create
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<div th:replace="/components/views/Footer"></div>
