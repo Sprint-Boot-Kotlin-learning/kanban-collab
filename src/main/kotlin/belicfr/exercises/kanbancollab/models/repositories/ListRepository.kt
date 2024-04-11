@@ -7,7 +7,7 @@ import org.springframework.data.repository.CrudRepository
 
 interface ListRepository: JpaRepository<KList, Long> {
 
-    fun findAllByOrderByPosition(): List<KList>
+    fun findAllByTableOrderByPosition(table: KTable): List<KList>
 
     fun findFirstByTableOrderByIdDesc(table: KTable): KList?
 
