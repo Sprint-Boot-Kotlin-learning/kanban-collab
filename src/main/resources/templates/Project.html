@@ -50,7 +50,16 @@
         </header>
 
         <div class="new-list-container__list-content">
-            <form class="list-content__new-list-form" action="" method="post">
+            <div class="error"
+                 th:include="/components/Error :: error_container(${errors})"
+                 th:if="${errors}"></div>
+
+            <form class="list-content__new-list-form"
+                  action="/board/project/lists/create"
+                  method="post">
+
+                <input type="hidden" name="token" th:value="${project.token}">
+
                 <label for="name">
                     <p>
                         Name:
