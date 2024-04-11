@@ -3,15 +3,24 @@
 
 <header class="project__header">
     <h1 class="header__project-name"
-        th:text="${project.getName()}">
+        th:text="${project.getName()}">project.name</h1>
 
-        project.name
-    </h1>
+    <a th:href="@{ '/board/project/' + ${project.token} + '/edit' }">
+        <button class="button-secondary header__edit-button">
+            <i class="fa-solid fa-pen"></i>
+        </button>
+    </a>
 </header>
 
 <section id="project_lists" class="project__lists-container">
     <div class="lists-container__list"
          th:each="list: ${orderedLists}">
+
+        <div class="list__actions">
+            <button class="button-secondary">
+                <i class="fa-solid fa-pen"></i>
+            </button>
+        </div>  <!-- FIXME: overflow issue -->
 
         <header class="list__list-header">
             <h2 class="list-header__title"
