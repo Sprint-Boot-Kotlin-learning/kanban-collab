@@ -8,11 +8,11 @@ import jakarta.persistence.OneToMany
 import java.time.LocalDate
 
 @Entity
-class KCard(@Id @GeneratedValue val id: Long?,
+class KCard(@Id @GeneratedValue val id: Long? = null,
             var title: String,
             var description: String,
             var endDate: LocalDate = LocalDate.now(),
-            @OneToMany val contributors: Set<KUser>,
+            @OneToMany val contributors: MutableSet<KUser> = mutableSetOf(),
             @ManyToOne val list: KList) {
 
 
