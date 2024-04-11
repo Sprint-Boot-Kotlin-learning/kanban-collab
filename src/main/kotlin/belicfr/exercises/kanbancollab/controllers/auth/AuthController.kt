@@ -18,7 +18,7 @@ import org.springframework.web.servlet.view.RedirectView
 class AuthController(val userRepository: UserRepository) {
 
     companion object {
-        private const val EMPTY_REQUIRED_FIELD_ERROR: String
+        const val EMPTY_REQUIRED_FIELD_ERROR: String
             = "%s input is required."
 
         private const val INVALID_CREDENTIALS_ERROR: String
