@@ -1,6 +1,5 @@
 package belicfr.exercises.kanbancollab.models
 
-import belicfr.exercises.kanbancollab.models.repositories.UserRepository
 import jakarta.persistence.Embeddable
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -18,20 +17,22 @@ class KUser(@Id @GeneratedValue val id: Long? = null,
     companion object {
         const val LOGIN_ALREADY_USED_ERROR: String
             = "This login is already used."
+
+        const val ACCOUNT_DOES_NOT_EXIST_ERROR: String
+            = "The account does not longer exist."
     }
 
     @Embeddable
     data class Username(val username: String) {
         companion object {
-            private const val USERNAME_MIN_LENGTH: Int = 3
-            private const val USERNAME_MAX_LENGTH: Int = 15
+            const val USERNAME_MIN_LENGTH: Int = 3
+            const val USERNAME_MAX_LENGTH: Int = 15
 
             const val USERNAME_LENGTH_ERROR: String
                 = "The username must contains between $USERNAME_MIN_LENGTH " +
                   "and $USERNAME_MAX_LENGTH."
 
             fun isValidUsername(username: String): Boolean {
-                // TODO: verify if username already exists!!
                 return username.length in USERNAME_MIN_LENGTH..USERNAME_MAX_LENGTH
                 // [..] operator does not exclude MIN and MAX values
                 //     MIN..MAX
@@ -71,13 +72,17 @@ class KUser(@Id @GeneratedValue val id: Long? = null,
     @Embeddable
     data class Password(private val givenPassword: String) {
         companion object {
-            private const val PASSWORD_MAX_LENGTH: Int = 8
+            private const val PASSWORD_MIN_LENGTH: Int = 8
             // const = PRIMITIVE ON COMPILING
             // CANNOT BE DEFINED WITH CALCULATED VALUES OR DYNAMICALLY
             // Only on companion objects!!
 
+            const val INVALID_PASSWORD_LENGTH_ERROR: String
+                = "Your password must contains at least " +
+                  "$PASSWORD_MIN_LENGTH characters."
+
             fun isValidPassword(password: String)
-                = password.length >= PASSWORD_MAX_LENGTH
+                = password.length >= PASSWORD_MIN_LENGTH
         }
 
         var password: String
@@ -91,5 +96,8 @@ class KUser(@Id @GeneratedValue val id: Long? = null,
 
             this.password = BCrypt.hashpw(givenPassword, BCrypt.gensalt())
         }
+
+        fun verify(password: String): Boolean
+            = BCrypt.checkpw(password, this.password)
     }
 }
