@@ -12,9 +12,19 @@
 <section id="your_projects"
          class="board__your-projects">
 
-    <h2 class="your-projects__section-title">
-        Your projects
-    </h2>
+    <header class="your-projects__section-header">
+        <h2 class="section-header__title">
+            Your projects
+        </h2>
+
+        <div class="section-header__actions">
+            <a href="/board/project/new">
+                <button class="button-primary">
+                    New project
+                </button>
+            </a>
+        </div>
+    </header>
 
     <a th:href="@{ '/board/project/' + ${project.token} }"
        th:each="project: ${projects}">

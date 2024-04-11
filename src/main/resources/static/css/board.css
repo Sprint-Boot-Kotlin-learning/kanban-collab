@@ -22,14 +22,22 @@ section.board__your-projects {
     gap: 10px;
 }
 
-.your-projects__section-title {
-    text-transform: uppercase;
-    font-weight: 700;
-    font-size: 1.7rem;
-
+header.your-projects__section-header {
     grid-column: 1 / -1;
 
     margin-bottom: 10px;
+
+    display: flex;
+    column-gap: 20px;
+    row-gap: 5px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+h2.section-header__title {
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 1.7rem;
 }
 
 .your-projects__project-box {
@@ -161,10 +169,21 @@ p.card__description {
     font-size: .8rem;
 }
 
-form.list-content__new-list-form {
+form.list-content__new-list-form,
+form.new-project-container__form {
     display: flex;
     flex-direction: column;
     row-gap: 10px;
+}
+
+form.new-project-container__form {
+    width: 25%;
+}
+
+form.new-project-container__form input {
+    width: 100%;
+
+    display: block;
 }
 
 form.list-content__new-list-form input,
