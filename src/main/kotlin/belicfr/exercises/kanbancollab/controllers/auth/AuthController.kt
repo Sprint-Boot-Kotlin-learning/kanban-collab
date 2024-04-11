@@ -1,4 +1,4 @@
-package belicfr.exercises.kanbancollab.controllers
+package belicfr.exercises.kanbancollab.controllers.auth
 
 import belicfr.exercises.kanbancollab.models.KUser
 import belicfr.exercises.kanbancollab.models.repositories.UserRepository
@@ -72,9 +72,9 @@ class AuthController(val userRepository: UserRepository) {
             return Redirect.to("/auth")
         }
 
-        session.setAttribute("user_id", user)
+        session.setAttribute("user", user)
 
-        return Redirect.to("/auth")  // TODO: change to /board route
+        return Redirect.to("/board")
     }
 
     @GetMapping("/register", "/register/")
@@ -94,23 +94,27 @@ class AuthController(val userRepository: UserRepository) {
         val errors: MutableList<String> = arrayListOf()
 
         if (firstname.isBlank()) {
-            errors.add(String.format(EMPTY_REQUIRED_FIELD_ERROR,
-                                     "Firstname"))
+            errors.add(String.format(
+                EMPTY_REQUIRED_FIELD_ERROR,
+                "Firstname"))
         }
 
         if (lastname.isBlank()) {
-            errors.add(String.format(EMPTY_REQUIRED_FIELD_ERROR,
-                                     "Lastname"))
+            errors.add(String.format(
+                EMPTY_REQUIRED_FIELD_ERROR,
+                "Lastname"))
         }
 
         if (email.isBlank()) {
-            errors.add(String.format(EMPTY_REQUIRED_FIELD_ERROR,
-                                     "Email address"))
+            errors.add(String.format(
+                EMPTY_REQUIRED_FIELD_ERROR,
+                "Email address"))
         }
 
         if (password.isBlank()) {
-            errors.add(String.format(EMPTY_REQUIRED_FIELD_ERROR,
-                                     "Password"))
+            errors.add(String.format(
+                EMPTY_REQUIRED_FIELD_ERROR,
+                "Password"))
         }
 
         if (!KUser.Username.isValidUsername(login)) {
@@ -164,9 +168,6 @@ class AuthController(val userRepository: UserRepository) {
             email = KUser.EmailAddress(email),
             password = KUser.Password(password)
         ))
-
-        for (user: KUser in userRepository.findAll())
-            println("[${user.id}] ${user.login}")
 
         return Redirect.to("/auth")
     }
