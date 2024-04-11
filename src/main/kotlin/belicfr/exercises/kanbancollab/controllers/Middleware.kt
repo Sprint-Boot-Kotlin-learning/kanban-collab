@@ -1,5 +1,6 @@
 package belicfr.exercises.kanbancollab.controllers
 
+import belicfr.exercises.kanbancollab.exceptions.NotAuthenticatedException
 import belicfr.exercises.kanbancollab.models.KUser
 import belicfr.exercises.kanbancollab.models.repositories.UserRepository
 import belicfr.exercises.kanbancollab.utilities.Redirect
@@ -10,11 +11,19 @@ import org.springframework.web.servlet.view.RedirectView
 import java.util.Optional
 
 @Controller
-class Dispatcher(val session: HttpSession,
+class Middleware(val session: HttpSession,
                  val userRepository: UserRepository) {
 
+    companion object {
+        fun redirectIfNotLogged(session: HttpSession) {
+            if (session.getAttribute("user") == null) {
+                throw NotAuthenticatedException()
+            }
+        }
+    }
+
     @GetMapping("", "/")
-    fun dispatch(): RedirectView {
+    fun rootRelativeToSessionState(): RedirectView {
         val currentSessionUserId: Long
             = (session.getAttribute("user") as? Long) ?: -1
 
