@@ -84,6 +84,8 @@ h3.project-box__title {
 .project__lists-container {
     display: flex;
     column-gap: 20px;
+
+    overflow-x: auto;
 }
 
 .lists-container__list,
@@ -98,6 +100,8 @@ h3.project-box__title {
 
     display: flex;
     flex-direction: column;
+
+    flex: none;
 }
 
 header.list__list-header,
