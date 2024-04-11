@@ -6,6 +6,10 @@
         Log in
     </h1>
 
+    <div class="error"
+         th:include="/components/Error :: error_container(${errors})"
+         th:if="${errors}"></div>
+
     <form class="form-container__form" action="/auth/login" method="post">
         <label for="login">
             <p>
