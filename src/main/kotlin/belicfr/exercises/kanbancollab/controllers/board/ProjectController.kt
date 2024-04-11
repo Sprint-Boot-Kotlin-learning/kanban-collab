@@ -102,9 +102,25 @@ class ProjectController(private val tableRepository: TableRepository,
             project.lists.add(list)
             tableRepository.save(project)
             tableRepository.flush()
+
+            this.incrementNextLists(list)
         }
 
         return Redirect.to("/board/project/$token")
+    }
+
+    private fun incrementNextLists(list: KList) {
+        val nextLists: List<KList>
+            = listRepository
+                .findAllByPositionIsGreaterThanEqualAndIdIsNot(
+                    list.position, list.id!!)
+
+        for (list: KList in nextLists) {
+            list.position++
+            listRepository.save(list)
+        }
+
+        listRepository.flush()
     }
 
     private fun isProjectExisting(token: UUID): Boolean {
