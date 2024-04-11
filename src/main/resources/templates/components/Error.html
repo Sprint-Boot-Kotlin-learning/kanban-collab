@@ -3,5 +3,5 @@
         An error occured…
     </h3>
 
-    <p class="error__message" th:text="message" th:for="message in ${errors}"></p>
+    <p class="error__message" th:text="${message}" th:each="message: ${errors}"></p>
 </div>
