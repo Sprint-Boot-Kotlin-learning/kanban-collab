@@ -17,7 +17,7 @@ class KList(@Id @GeneratedValue val id: Long? = null,
         const val NAME_MAX_LENGTH = 50
 
         const val INVALID_NAME_LENGTH_ERROR
-            = "The name must contain less than " +
+            = "The name length must be between 1 and " +
               "$NAME_MAX_LENGTH characters."
 
         const val INVALID_POSITION_ERROR
