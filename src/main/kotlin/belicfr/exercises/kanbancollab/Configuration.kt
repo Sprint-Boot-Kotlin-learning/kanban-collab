@@ -59,12 +59,24 @@ class Configuration {
         table1.lists.add(list1)
         tableRepository.save(table1)
 
-        cardRepository.save(KCard(
+        val card1: KCard = KCard(
             title = "Fix bugs on app1",
             description = "There are many bugs on app1!!...",
             contributors = mutableSetOf(),
-            list = list1
-        ))
+            list = list1)
+
+        val card2: KCard = KCard(
+            title = "This is my second card! :)",
+            description = "Let's read my second card of this list.",
+            contributors = mutableSetOf(),
+            list = list1)
+
+        cardRepository.save(card1)
+        cardRepository.save(card2)
+
+        list1.cards.add(card1)
+        list1.cards.add(card2)
+        listRepository.save(list1)
 
         listRepository.flush()
         cardRepository.flush()
