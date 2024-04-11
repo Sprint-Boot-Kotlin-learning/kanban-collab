@@ -6,16 +6,21 @@
         Create an account
     </h1>
 
+    <div class="error"
+         th:include="/components/Error :: error_container(${errors})"
+         th:if="${errors}"></div>
+
     <form class="form-container__form" action="/auth/register/create-account" method="post">
         <label for="firstname">
             <p>
                 Firstname:
             </p>
 
-            <input class="large"
+            <input id="firstname"
+                   class="large"
                    type="text"
                    name="firstname"
-                   id="firstname" />
+                   th:value="${firstname}" />
         </label>
 
         <label for="lastname">
@@ -23,10 +28,11 @@
                 Lastname:
             </p>
 
-            <input class="large"
+            <input id="lastname"
+                   class="large"
                    type="text"
                    name="lastname"
-                   id="lastname" />
+                   th:value="${lastname}" />
         </label>
 
         <label for="login">
@@ -34,10 +40,23 @@
                 Login:
             </p>
 
-            <input class="large"
+            <input id="login"
+                   class="large"
                    type="text"
                    name="login"
-                   id="login" />
+                   th:value="${login}" />
+        </label>
+
+        <label for="email">
+            <p>
+                Email address:
+            </p>
+
+            <input id="email"
+                   class="large"
+                   type="email"
+                   name="email"
+                   th:value="${email}" />
         </label>
 
         <label for="password">
@@ -45,15 +64,15 @@
                 Password:
             </p>
 
-            <input class="large"
+            <input id="password"
+                   class="large"
                    type="password"
-                   name="password"
-                   id="password" />
+                   name="password" />
         </label>
 
         <div class="form-container__form__actions">
             <button class="button-primary" type="submit">
-                Log in
+                Create your account!
             </button>
         </div>
     </form>
