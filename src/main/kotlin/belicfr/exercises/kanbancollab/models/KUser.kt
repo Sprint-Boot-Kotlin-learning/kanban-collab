@@ -46,6 +46,9 @@ class KUser(@Id @GeneratedValue val id: Long? = null,
                 throw IllegalArgumentException(USERNAME_LENGTH_ERROR)
             }
         }
+
+        override fun toString(): String
+            = this.username
     }
 
     @Embeddable
@@ -67,6 +70,9 @@ class KUser(@Id @GeneratedValue val id: Long? = null,
                     "Invalid email address.")
             }
         }
+
+        override fun toString(): String
+            = this.address
     }
 
     @Embeddable
@@ -99,5 +105,8 @@ class KUser(@Id @GeneratedValue val id: Long? = null,
 
         fun verify(password: String): Boolean
             = BCrypt.checkpw(password, this.password)
+
+        override fun toString(): String
+            = this.password
     }
 }
