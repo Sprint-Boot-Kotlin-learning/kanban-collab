@@ -15,6 +15,17 @@ class KTable(@Id @GeneratedValue val id: Long? = null,
              @ManyToMany val members: MutableSet<KUser> = mutableSetOf(),
              @OneToMany val lists: MutableSet<KList> = mutableSetOf()) {
 
+    companion object {
+        const val NAME_MAX_LENGTH: Int = 50
+
+        const val INVALID_NAME_LENGTH_ERROR: String
+            = "The name must contain less than " +
+              "$NAME_MAX_LENGTH characters."
+
+        fun isNameValid(name: String): Boolean
+            = name.length in 1..NAME_MAX_LENGTH
+    }
+
     fun getSomeMembers(count: Int): List<KUser>
         = this.members.take(count)
 }
