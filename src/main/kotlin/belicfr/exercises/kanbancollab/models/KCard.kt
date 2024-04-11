@@ -13,7 +13,4 @@ class KCard(@Id @GeneratedValue val id: Long? = null,
             var description: String,
             var endDate: LocalDate = LocalDate.now(),
             @OneToMany val contributors: MutableSet<KUser> = mutableSetOf(),
-            @ManyToOne val list: KList) {
-
-
-}
+            @ManyToOne val list: KList)
