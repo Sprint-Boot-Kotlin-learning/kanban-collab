@@ -157,6 +157,55 @@ class ProjectController(private val tableRepository: TableRepository,
         return Redirect.to("/board")
     }
 
+    @GetMapping("/{token}/edit", "/{token}/edit/")
+    fun renderEditProject(@PathVariable("token") token: UUID,
+                          model: Model): String {
+
+        if (!this.isProjectExisting(token)) {
+            return "redirect:/board"
+        }
+
+        val user: KUser = session.getAttribute("user") as KUser
+        val project: KTable = tableRepository.findKTableByToken(token) as KTable
+
+        model["user"] = user
+        model["project"] = project
+        model["nameMaxLength"] = KTable.NAME_MAX_LENGTH
+
+        return "EditProject"
+    }
+
+    @PostMapping("/edit", "/edit/")
+    fun editProject(@RequestParam("token") token: UUID,
+                    @RequestParam("name") name: String,
+                    redirectAttributes: RedirectAttributes): RedirectView {
+
+        val errors: MutableList<String> = arrayListOf()
+
+        if (name.isBlank()) {
+            errors.add(String.format(AuthController.EMPTY_REQUIRED_FIELD_ERROR,
+                                     "Name"))
+        }
+
+        if (!KTable.isNameValid(name)) {
+            errors.add(KTable.INVALID_NAME_LENGTH_ERROR)
+        }
+
+        if (errors.isNotEmpty()) {
+            redirectAttributes.addFlashAttribute("errors",
+                                                 errors)
+
+            return Redirect.to("/board/project/$token/edit")
+        }
+
+        this.project = tableRepository.findKTableByToken(token) as KTable
+        this.project.name = name
+        tableRepository.save(this.project)
+        tableRepository.flush()
+
+        return Redirect.to("/board/project/$token")
+    }
+
     private fun incrementNextLists(list: KList) {
         val nextLists: List<KList>
             = listRepository
