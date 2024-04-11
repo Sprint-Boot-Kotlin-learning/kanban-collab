@@ -7,4 +7,6 @@ interface UserRepository: CrudRepository<KUser, Long> {
 
     fun countAllByLogin(login: KUser.Username): Int
 
+    fun findKUserByLogin(login: KUser.Username): KUser?
+
 }
