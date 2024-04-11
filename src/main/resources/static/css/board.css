@@ -9,11 +9,21 @@
 header.board__header,
 header.project__header {
     margin-bottom: 50px;
+
+    display: flex;
+    align-items: center;
+    column-gap: 15px;
 }
 
 h1.header__user-name,
 h1.header__project-name {
     font-size: 3rem;
+}
+
+button.header__edit-button {
+    aspect-ratio: 1;
+
+    padding: 12px;
 }
 
 section.board__your-projects {
@@ -101,8 +111,6 @@ h3.project-box__title {
     border: solid 1px #d1d1d1;
     border-radius: 10px;
 
-    overflow: hidden;
-
     width: 300px;
     height: 500px;
 
@@ -110,6 +118,20 @@ h3.project-box__title {
     flex-direction: column;
 
     flex: none;
+
+    position: relative;
+}
+
+.list__actions {
+    position: absolute;
+    top: -50%;
+    right: 10px;
+
+    transform: translateY(50%);
+
+    display: flex;
+    justify-content: flex-end;
+    column-gap: 5px;
 }
 
 header.list__list-header,
@@ -124,6 +146,8 @@ header.new-list-container__list-header {
     background: #E6E6E6;
 
     border-bottom: solid 1px #d1d1d1;
+    border-top-left-radius: 9px;
+    border-top-right-radius: 9px;
 
     padding: 7px 20px;
 
