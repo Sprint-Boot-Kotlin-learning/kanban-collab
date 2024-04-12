@@ -104,6 +104,8 @@ h3.project-box__title {
     column-gap: 20px;
 
     overflow-x: auto;
+
+    padding: 20px 0;
 }
 
 .lists-container__list,
@@ -124,14 +126,22 @@ h3.project-box__title {
 
 .list__actions {
     position: absolute;
-    top: -50%;
+    top: -15px;
     right: 10px;
-
-    transform: translateY(50%);
 
     display: flex;
     justify-content: flex-end;
     column-gap: 5px;
+}
+
+.list__actions > button {
+    border: solid 1px #d1d1d1;
+
+    aspect-ratio: 1;
+
+    padding: 7px;
+
+    flex: none;
 }
 
 header.list__list-header,
