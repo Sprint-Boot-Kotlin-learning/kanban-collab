@@ -2,6 +2,7 @@ package belicfr.exercises.kanbancollab.controllers
 
 import belicfr.exercises.kanbancollab.exceptions.NotAuthenticatedException
 import belicfr.exercises.kanbancollab.models.KUser
+import belicfr.exercises.kanbancollab.models.repositories.TableRepository
 import belicfr.exercises.kanbancollab.models.repositories.UserRepository
 import belicfr.exercises.kanbancollab.utilities.Redirect
 import jakarta.servlet.http.HttpSession
@@ -9,10 +10,11 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.servlet.view.RedirectView
 import java.util.Optional
+import java.util.UUID
 
 @Controller
-class Middleware(val session: HttpSession,
-                 val userRepository: UserRepository) {
+class Middleware(private val session: HttpSession,
+                 private val userRepository: UserRepository) {
 
     companion object {
         fun redirectIfNotLogged(session: HttpSession) {
