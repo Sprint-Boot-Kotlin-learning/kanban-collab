@@ -208,6 +208,12 @@ class ListController(private val listRepository: ListRepository,
 
         this.project = tableRepository.findKTableByToken(token) as KTable
 
+        val user: KUser = session.getAttribute("user") as KUser
+
+        if (!this.isUserProjectMember(user)) {
+            return "redirect:/board/project/$token"
+        }
+
         val list: Optional<KList> = listRepository.findById(listId)
 
         if (!list.isPresent || !this.isListExisting(listId)) {
