@@ -37,7 +37,11 @@
         <div class="list__actions"
              th:if="${isMember}">
 
-            <a href=""
+            <a th:href="@{ '/board/project/'
+                            + ${project.getToken()}
+                            + '/'
+                            + ${list.key.getId()}
+                            + '/move/left' }"
                th:if="${list.key.getPosition() > 1}">
 
                 <button class="button-primary">
