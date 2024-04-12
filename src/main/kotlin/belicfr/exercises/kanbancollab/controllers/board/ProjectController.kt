@@ -93,7 +93,6 @@ class ProjectController(private val tableRepository: TableRepository,
 
         val errors: MutableList<String> = arrayListOf()
 
-
         if (name.isBlank()) {
             errors.add(String.format(AuthController.EMPTY_REQUIRED_FIELD_ERROR,
                                      "Name"))
@@ -101,6 +100,10 @@ class ProjectController(private val tableRepository: TableRepository,
 
         if (!KList.isNameValid(name)) {
             errors.add(KList.INVALID_NAME_LENGTH_ERROR)
+        }
+
+        if (this.isListNameAlreadyTaken(name)) {
+            errors.add(KList.NAME_ALREADY_TAKEN_ERROR)
         }
 
         if (!KList.isPositionValid(position)) {
@@ -304,5 +307,8 @@ class ProjectController(private val tableRepository: TableRepository,
 
     private fun isUserProjectMember(user: KUser): Boolean
         = this.project.members.any { it == user }
+
+    private fun isListNameAlreadyTaken(name: String): Boolean
+        = listRepository.countAllByName(name) > 0
 
 }
