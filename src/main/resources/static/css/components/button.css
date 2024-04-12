@@ -5,6 +5,9 @@
     --button-secondary-background: #E6E6E6;
     --button-secondary-color: black;
 
+    --button-danger-background: #d12b2b;
+    --button-danger-color: white;
+
     --button-default-background: var(--button-secondary-background);
     --button-default-color: var(--button-secondary-color);
 }
@@ -41,4 +44,10 @@ button.button-secondary {
     background: var(--button-secondary-background);
 
     color: var(--button-secondary-color);
+}
+
+button.button-danger {
+    background: var(--button-danger-background);
+
+    color: var(--button-danger-color);
 }
