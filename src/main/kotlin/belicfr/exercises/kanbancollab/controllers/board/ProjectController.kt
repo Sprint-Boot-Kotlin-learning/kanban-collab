@@ -69,7 +69,7 @@ class ProjectController(private val tableRepository: TableRepository,
         model["nextPosition"] = nextPosition
         model["isMember"] = this.isUserProjectMember(user)
 
-        return "Project"
+        return "Board/Project/Project"
     }
 
     @PostMapping("/lists/create")
@@ -137,7 +137,7 @@ class ProjectController(private val tableRepository: TableRepository,
         model["user"] = user
         model["nameMaxLength"] = KTable.NAME_MAX_LENGTH
 
-        return "NewProject"
+        return "Board/Project/NewProject"
     }
 
     @PostMapping("/new/create", "/new/create/")
@@ -194,7 +194,7 @@ class ProjectController(private val tableRepository: TableRepository,
         model["project"] = this.project
         model["nameMaxLength"] = KTable.NAME_MAX_LENGTH
 
-        return "EditProject"
+        return "Board/Project/EditProject"
     }
 
     @PostMapping("/edit", "/edit/")
@@ -258,7 +258,7 @@ class ProjectController(private val tableRepository: TableRepository,
 
         model["project"] = this.project
 
-        return "DeleteProject"
+        return "Board/Project/DeleteProject"
     }
 
     @PostMapping("/delete", "/delete/")

@@ -3,7 +3,6 @@ package belicfr.exercises.kanbancollab.controllers.board
 import belicfr.exercises.kanbancollab.controllers.Middleware
 import belicfr.exercises.kanbancollab.models.KUser
 import belicfr.exercises.kanbancollab.models.repositories.TableRepository
-import belicfr.exercises.kanbancollab.models.repositories.UserRepository
 import jakarta.servlet.http.HttpSession
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -30,7 +29,7 @@ class BoardController(private val session: HttpSession,
         model["projects"] = tableRepository.findAllByMembersContainsOrderByIdDesc(
             user)
 
-        return "Board"
+        return "Board/Board"
     }
 
 }

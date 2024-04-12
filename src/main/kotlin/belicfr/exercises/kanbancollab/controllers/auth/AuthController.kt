@@ -27,7 +27,7 @@ class AuthController(val userRepository: UserRepository) {
 
     @GetMapping("", "/")
     fun renderLogin(model: Model): String {
-        return "Login"
+        return "Auth/Login"
     }
 
     @PostMapping("/login", "/login/")
@@ -79,7 +79,7 @@ class AuthController(val userRepository: UserRepository) {
 
     @GetMapping("/register", "/register/")
     fun renderRegister(model: Model): String {
-        return "Register"
+        return "Auth/Register"
     }
 
     @PostMapping("/register/create-account", "/register/create-account/")
