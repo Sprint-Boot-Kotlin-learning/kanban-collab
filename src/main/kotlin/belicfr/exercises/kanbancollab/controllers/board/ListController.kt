@@ -238,6 +238,15 @@ class ListController(private val listRepository: ListRepository,
             && list.isPresent
             && this.isUserProjectMember(user)) {
 
+            val rightLists: List<KList>
+                = listRepository.findAllByPositionIsGreaterThanEqualAndIdIsNot(
+                    list.get().position, list.get().id!!)
+
+            for (rightList: KList in rightLists) {
+                rightList.position--
+                listRepository.save(rightList)
+            }
+
             this.project.lists.remove(list.get())
             tableRepository.save(this.project)
             tableRepository.flush()
