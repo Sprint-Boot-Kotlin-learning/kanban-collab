@@ -264,6 +264,35 @@ class ListController(private val listRepository: ListRepository,
         return Redirect.to("/board/project/$token")
     }
 
+    @GetMapping("/cards/create", "/cards/create/")
+    fun renderCreateCard(@PathVariable("token") token: UUID,
+                         @PathVariable("listId") listId: Long,
+                         model: Model): String {
+
+        if (!this.isProjectExisting(token)) {
+            return "redirect:/board"
+        }
+
+        this.project = tableRepository.findKTableByToken(token) as KTable
+
+        val user: KUser = session.getAttribute("user") as KUser
+
+        if (!this.isUserProjectMember(user)) {
+            return "redirect:/board/project/$token"
+        }
+
+        val list: Optional<KList> = listRepository.findById(listId)
+
+        if (!list.isPresent || !this.isListExisting(listId)) {
+            return "/board/project/$token"
+        }
+
+        model["projectToken"] = token
+        model["list"] = list.get()
+
+        return "Board/Project/Lists/Cards/NewCard"
+    }
+
     private fun isProjectExisting(token: UUID): Boolean {
         val projectCountWithGivenToken: Int
             = tableRepository.countAllByToken(token)
