@@ -1,4 +1,4 @@
-<div th:replace="/components/views/Header :: header(${user.login} + ' board', 'board')"></div>
+<div th:replace="/components/views/Header :: header('Edit ' + ${project.getName()}, 'board')"></div>
 <div th:replace="/components/views/Header :: #app"></div>
 
 <header class="board__header">
