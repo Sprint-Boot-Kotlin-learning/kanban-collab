@@ -109,4 +109,9 @@ class KUser(@Id @GeneratedValue val id: Long? = null,
         override fun toString(): String
             = this.password
     }
+
+    override fun equals(other: Any?): Boolean
+        = this === other
+          || this.javaClass === other?.javaClass
+          && (other as KUser).id == this.id
 }
