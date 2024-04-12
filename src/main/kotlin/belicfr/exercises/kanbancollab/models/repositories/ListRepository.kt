@@ -9,10 +9,12 @@ interface ListRepository: JpaRepository<KList, Long> {
 
     fun findAllByTableOrderByPosition(table: KTable): List<KList>
 
-    fun findFirstByTableOrderByIdDesc(table: KTable): KList?
+    fun findFirstByTableOrderByPositionDesc(table: KTable): KList?
 
     fun countAllByTable(table: KTable): Int
 
     fun findAllByPositionIsGreaterThanEqualAndIdIsNot(position: Int, id: Long): List<KList>
+
+    fun findKListByPosition(position: Int): KList?
 
 }
