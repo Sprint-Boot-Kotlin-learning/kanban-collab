@@ -45,11 +45,11 @@ class ProjectController(private val tableRepository: TableRepository,
 
         this.project = tableRepository.findKTableByToken(token) as KTable
 
-        var nextPosition: Int
+        val nextPosition: Int
 
         if (this.isProjectHavingLists()) {
             val lastPositionObject: KList
-                = listRepository.findFirstByTableOrderByIdDesc(project) as KList
+                = listRepository.findFirstByTableOrderByPositionDesc(project) as KList
 
             nextPosition = lastPositionObject.position + 1
         } else {
