@@ -1,0 +1,36 @@
+<div th:replace="/components/views/Header :: header('Delete ' + ${project.getName()}, 'board')"></div>
+<div th:replace="/components/views/Header :: #app"></div>
+
+<header class="board__header">
+    <h1 class="header__user-name"
+        th:text="@{ 'Delete: ' + ${project.name} }">delete.project</h1>
+</header>
+
+<section id="new_project" class="new-project-container">
+    <form class="new-project-container__form"
+          action="/board/project/delete"
+          method="post">
+
+        <div class="error"
+             th:include="/components/Error :: error_container(${errors})"
+             th:if="${errors}"></div>
+
+        <input type="hidden" name="token" th:value="${project.token}" />
+
+        <label for="confirmation">
+            <p id="confirmation">
+                Are you sure you want to cancel this project?
+            </p>
+        </label>
+
+        <div class="form__actions">
+            <button class="button-danger"
+                    type="submit">
+
+                DELETE
+            </button>
+        </div>
+    </form>
+</section>
+
+<div th:replace="/components/views/Footer"></div>
