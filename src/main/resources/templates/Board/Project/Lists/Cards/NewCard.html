@@ -1,0 +1,54 @@
+<div th:replace="/components/views/Header :: header('New ' + ${list.getName()} + ' card', 'board')"></div>
+<div th:replace="/components/views/Header :: #app"></div>
+
+<header class="board__header">
+    <h1 class="header__user-name"
+        th:text="@{ 'New ' + ${list.getName()} + ' card' }">project.list.card.new</h1>
+</header>
+
+<section id="new_project" class="new-project-container">
+    <form class="new-project-container__form"
+          action=""
+          method="post">
+
+        <div class="error"
+             th:include="/components/Error :: error_container(${errors})"
+             th:if="${errors}"></div>
+
+        <input type="hidden" name="token" th:value="${projectToken}" />
+        <input type="hidden" name="listId" th:value="${list.getId()}" />
+
+        <label for="title">
+            <p>
+                Title:
+            </p>
+
+            <input id="title"
+                   type="text"
+                   name="title"
+                   th:maxlength="${titleMaxLength}"
+                   required />
+        </label>
+
+        <label for="description">
+            <p>
+                Description:
+            </p>
+
+            <textarea id="description"
+                      type="text"
+                      name="description"
+                      th:maxlength="${descriptionMaxLength}"></textarea>
+        </label>
+
+        <div class="form__actions">
+            <button class="button-primary"
+                    type="submit">
+
+                Create
+            </button>
+        </div>
+    </form>
+</section>
+
+<div th:replace="/components/views/Footer"></div>
