@@ -70,6 +70,52 @@ class ListController(private val userRepository: UserRepository,
         return Redirect.to("/board/project/$token")
     }
 
+    @GetMapping("/move/right", "/move/right/")
+    fun moveToRight(@PathVariable("token") token: UUID,
+                   @PathVariable("listId") listId: Long): RedirectView {
+
+        if (!this.isProjectExisting(token)) {
+            return Redirect.to("/board")
+        }
+
+        this.project = tableRepository.findKTableByToken(token) as KTable
+
+        val listQuery: Optional<KList> = listRepository.findById(listId)
+        val lastPositionQuery: KList?
+            = listRepository.findFirstByTableOrderByPositionDesc(this.project)
+        val lastPosition: Int
+        val user: KUser = session.getAttribute("user") as KUser
+
+        if (lastPositionQuery !== null) {
+            lastPosition = lastPositionQuery.position
+        } else {
+            lastPosition = listQuery.get().position
+        }
+
+        if (listQuery.isPresent
+            && listQuery.get().position < lastPosition
+            && this.isUserProjectMember(user)) {
+
+            val list: KList = listQuery.get()
+            val nextListQuery: KList? = listRepository.findKListByPosition(
+                list.position + 1)
+
+            list.position++
+            listRepository.save(list)
+
+            if (nextListQuery !== null) {
+                val nextList: KList = nextListQuery
+
+                nextList.position--
+                listRepository.save(nextList)
+            }
+
+            listRepository.flush()
+        }
+
+        return Redirect.to("/board/project/$token")
+    }
+
     private fun isProjectExisting(token: UUID): Boolean {
         val projectCountWithGivenToken: Int
             = tableRepository.countAllByToken(token)
