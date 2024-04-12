@@ -90,17 +90,33 @@
         </header>
 
         <div class="list__list-content">
-            <a href="#"
-               th:each="card: ${list.value}">
+            <div class="list-content__cards-container">
+                <a href="#"
+                   th:each="card: ${list.value}">
 
-                <div class="list-content__card">
-                    <h3 class="card__title"
-                        th:text="${card.getTitle()}">card.title</h3>
+                    <div class="list-content__card">
+                        <h3 class="card__title"
+                            th:text="${card.getTitle()}">card.title</h3>
 
-                    <p class="card__description"
-                       th:text="${card.getDescription()}">card.description</p>
-                </div>
-            </a>
+                        <p class="card__description"
+                           th:text="${card.getDescription()}">card.description</p>
+                    </div>
+                </a>
+            </div>
+
+            <div class="list-content__list-actions">
+                <a th:href="@{ '/board/project/'
+                                + ${project.getToken()}
+                                + '/'
+                                + ${list.key.getId()}
+                                + '/cards/create' }">
+
+                    <button class="button-secondary list-actions__new-card-button">
+                        <i class="fa-solid fa-plus"></i>
+                        New card
+                    </button>
+                </a>
+            </div>
         </div>
     </div>
 
