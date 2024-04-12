@@ -61,7 +61,12 @@
                 </button>
             </a>
 
-            <a href="">
+            <a th:href="@{ '/board/project/'
+                            + ${project.getToken()}
+                            + '/'
+                            + ${list.key.getId()}
+                            + '/edit' }">
+
                 <button class="button-secondary">
                     <i class="fa-solid fa-pen"></i>
                 </button>
