@@ -25,6 +25,10 @@ class KList(@Id @GeneratedValue val id: Long? = null,
         const val INVALID_POSITION_ERROR
             = "The position must be greater than 0."
 
+        const val NAME_ALREADY_TAKEN_ERROR
+            = "This name is already taken by another column " +
+              "of the project."
+
         fun isNameValid(name: String): Boolean
             = name.length <= NAME_MAX_LENGTH
 
