@@ -1,5 +1,6 @@
 package belicfr.exercises.kanbancollab.models
 
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
@@ -11,7 +12,8 @@ class KList(@Id @GeneratedValue val id: Long? = null,
             var name: String,
             var position: Int,
             @ManyToOne val table: KTable,
-            @OneToMany val cards: MutableSet<KCard> = mutableSetOf()) {
+            @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true)
+                val cards: MutableSet<KCard> = mutableSetOf()) {
 
     companion object {
         const val NAME_MAX_LENGTH = 50
