@@ -72,7 +72,12 @@
                 </button>
             </a>
 
-            <a href="">
+            <a th:href="@{ '/board/project/'
+                            + ${project.getToken()}
+                            + '/'
+                            + ${list.key.getId()}
+                            + '/delete' }">
+
                 <button class="button-danger">
                     <i class="fa-solid fa-trash"></i>
                 </button>
