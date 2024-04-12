@@ -2,9 +2,11 @@ package belicfr.exercises.kanbancollab.controllers.board
 
 import belicfr.exercises.kanbancollab.controllers.Middleware
 import belicfr.exercises.kanbancollab.controllers.auth.AuthController
+import belicfr.exercises.kanbancollab.models.KCard
 import belicfr.exercises.kanbancollab.models.KList
 import belicfr.exercises.kanbancollab.models.KTable
 import belicfr.exercises.kanbancollab.models.KUser
+import belicfr.exercises.kanbancollab.models.repositories.CardRepository
 import belicfr.exercises.kanbancollab.models.repositories.ListRepository
 import belicfr.exercises.kanbancollab.models.repositories.TableRepository
 import belicfr.exercises.kanbancollab.utilities.Redirect
@@ -21,6 +23,7 @@ import java.util.UUID
 @RequestMapping("/board/project")
 class ProjectController(private val tableRepository: TableRepository,
                         private val listRepository: ListRepository,
+                        private val cardRepository: CardRepository,
                         private val session: HttpSession) {
 
     private lateinit var project: KTable
@@ -53,11 +56,18 @@ class ProjectController(private val tableRepository: TableRepository,
             nextPosition = 1
         }
 
+        val orderedLists: List<KList> = listRepository.findAllByTableOrderByPosition(
+            this.project)
+
+        val orderedListsWithCards: Map<KList, List<KCard>> = orderedLists.associateWith { list: KList ->
+            cardRepository.findAllByListOrderByIdDesc(list)
+        }
+
         model["user"] = user
         model["project"] = project
-        model["orderedLists"] = listRepository.findAllByTableOrderByPosition(
-            this.project)
+        model["orderedLists"] = orderedListsWithCards
         model["nextPosition"] = nextPosition
+        model["isMember"] = this.isUserProjectMember(user)
 
         return "Project"
     }
@@ -73,9 +83,16 @@ class ProjectController(private val tableRepository: TableRepository,
 
         }
 
-        val errors: MutableList<String> = arrayListOf()
+        val user: KUser = session.getAttribute("user") as KUser
 
         this.project = tableRepository.findKTableByToken(token) as KTable
+
+        if (!this.isUserProjectMember(user)) {
+            return Redirect.to("/board/project/$token")
+        }
+
+        val errors: MutableList<String> = arrayListOf()
+
 
         if (name.isBlank()) {
             errors.add(String.format(AuthController.EMPTY_REQUIRED_FIELD_ERROR,
@@ -166,10 +183,15 @@ class ProjectController(private val tableRepository: TableRepository,
         }
 
         val user: KUser = session.getAttribute("user") as KUser
-        val project: KTable = tableRepository.findKTableByToken(token) as KTable
+
+        this.project = tableRepository.findKTableByToken(token) as KTable
+
+        if (!this.isUserProjectMember(user)) {
+            return "redirect:/board/project/$token"
+        }
 
         model["user"] = user
-        model["project"] = project
+        model["project"] = this.project
         model["nameMaxLength"] = KTable.NAME_MAX_LENGTH
 
         return "EditProject"
@@ -179,6 +201,19 @@ class ProjectController(private val tableRepository: TableRepository,
     fun editProject(@RequestParam("token") token: UUID,
                     @RequestParam("name") name: String,
                     redirectAttributes: RedirectAttributes): RedirectView {
+
+
+        if (!this.isProjectExisting(token)) {
+            return Redirect.to("/board")
+        }
+
+        val user: KUser = session.getAttribute("user") as KUser
+
+        this.project = tableRepository.findKTableByToken(token) as KTable
+
+        if (!this.isUserProjectMember(user)) {
+            return Redirect.to("/board/project/$token")
+        }
 
         val errors: MutableList<String> = arrayListOf()
 
@@ -198,12 +233,49 @@ class ProjectController(private val tableRepository: TableRepository,
             return Redirect.to("/board/project/$token/edit")
         }
 
-        this.project = tableRepository.findKTableByToken(token) as KTable
         this.project.name = name
         tableRepository.save(this.project)
         tableRepository.flush()
 
         return Redirect.to("/board/project/$token")
+    }
+
+    @GetMapping("/{token}/delete", "/{token}/delete/")
+    fun renderDeleteProject(@PathVariable("token") token: UUID,
+                            model: Model): String {
+
+        if (!this.isProjectExisting(token)) {
+            return "redirect:/board"
+        }
+
+        val user: KUser = session.getAttribute("user") as KUser
+
+        this.project = tableRepository.findKTableByToken(token) as KTable
+
+        if (!this.isUserProjectMember(user)) {
+            return "redirect:/board"
+        }
+
+        model["project"] = this.project
+
+        return "DeleteProject"
+    }
+
+    @PostMapping("/delete", "/delete/")
+    fun deleteProject(@RequestParam("token") token: UUID): RedirectView {
+        if (!this.isProjectExisting(token)) {
+            return Redirect.to("/board")
+        }
+
+        val user: KUser = session.getAttribute("user") as KUser
+
+        this.project = tableRepository.findKTableByToken(token) as KTable
+
+        if (this.isUserProjectMember(user)) {
+            tableRepository.delete(this.project)
+        }
+
+        return Redirect.to("/board")
     }
 
     private fun incrementNextLists(list: KList) {
@@ -229,5 +301,8 @@ class ProjectController(private val tableRepository: TableRepository,
 
     private fun isProjectHavingLists(): Boolean
         = listRepository.countAllByTable(project) > 0
+
+    private fun isUserProjectMember(user: KUser): Boolean
+        = this.project.members.any { it == user }
 
 }
