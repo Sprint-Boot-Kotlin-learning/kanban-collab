@@ -5,26 +5,70 @@
     <h1 class="header__project-name"
         th:text="${project.getName()}">project.name</h1>
 
-    <a th:href="@{ '/board/project/' + ${project.token} + '/edit' }">
+    <a th:href="@{ '/board/project/' + ${project.token} + '/edit' }"
+       th:if="${isMember}">
+
         <button class="button-secondary header__edit-button">
             <i class="fa-solid fa-pen"></i>
+        </button>
+    </a>
+
+    <a th:href="@{ '/board/project/' + ${project.getToken()} + '/delete' }"
+       th:if="${isMember}">
+
+        <button class="button-danger header__edit-button">
+            <i class="fa-solid fa-trash"></i>
         </button>
     </a>
 </header>
 
 <section id="project_lists" class="project__lists-container">
+    <div class="lists__empty-project-alert"
+         th:if="${!isMember && orderedLists.isEmpty()}">
+
+        <p>
+            This project does not have any list. Only members can add.
+        </p>
+    </div>
+
     <div class="lists-container__list"
          th:each="list: ${orderedLists}">
 
-        <div class="list__actions">
-            <button class="button-secondary">
-                <i class="fa-solid fa-pen"></i>
-            </button>
-        </div> 
+        <div class="list__actions"
+             th:if="${isMember}">
+
+            <a href=""
+               th:if="${list.key.getPosition() > 1}">
+
+                <button class="button-primary">
+                    <i class="fa-solid fa-angle-left"></i>
+                </button>
+            </a>
+
+            <a href=""
+               th:if="${list.key.getPosition() + 1 < nextPosition}">
+
+                <button class="button-primary">
+                    <i class="fa-solid fa-angle-right"></i>
+                </button>
+            </a>
+
+            <a href="">
+                <button class="button-secondary">
+                    <i class="fa-solid fa-pen"></i>
+                </button>
+            </a>
+
+            <a href="">
+                <button class="button-danger">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </a>
+        </div>
 
         <header class="list__list-header">
             <h2 class="list-header__title"
-               th:text="${list.getName()}">
+               th:text="${list.key.getName()}">
 
                 list.title
             </h2>
@@ -32,7 +76,7 @@
 
         <div class="list__list-content">
             <a href="#"
-               th:each="card: ${list.getCards()}">
+               th:each="card: ${list.value}">
 
                 <div class="list-content__card">
                     <h3 class="card__title"
@@ -51,7 +95,9 @@
         </div>
     </div>
 
-    <div class="lists-container__new-list-container">
+    <div class="lists-container__new-list-container"
+         th:if="${isMember}">
+
         <header class="new-list-container__list-header">
             <h2 class="list-header__title">
                 Create a list
@@ -90,9 +136,9 @@
                                 First of all
                             </option>
 
-                            <option th:value="${list.getPosition() + 1}"
+                            <option th:value="${list.key.getPosition() + 1}"
                                     th:each="list: ${orderedLists}"
-                                    th:text="@{ 'After ' + ${list.getName()} }"></option>
+                                    th:text="@{ 'After ' + ${list.key.getName()} }"></option>
                         </optgroup>
                     </select>
                 </label>
