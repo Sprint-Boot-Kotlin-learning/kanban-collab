@@ -17,4 +17,6 @@ interface ListRepository: JpaRepository<KList, Long> {
 
     fun findKListByPosition(position: Int): KList?
 
+    fun countAllByName(name: String): Int
+
 }
