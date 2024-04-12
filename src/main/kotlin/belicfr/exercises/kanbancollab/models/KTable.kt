@@ -1,5 +1,6 @@
 package belicfr.exercises.kanbancollab.models
 
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Embeddable
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -13,7 +14,8 @@ class KTable(@Id @GeneratedValue val id: Long? = null,
              var name: String,
              val token: UUID = UUID.randomUUID(),
              @ManyToMany val members: MutableSet<KUser> = mutableSetOf(),
-             @OneToMany val lists: MutableSet<KList> = mutableSetOf()) {
+             @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true)
+                val lists: MutableSet<KList> = mutableSetOf()) {
 
     companion object {
         const val NAME_MAX_LENGTH: Int = 50
