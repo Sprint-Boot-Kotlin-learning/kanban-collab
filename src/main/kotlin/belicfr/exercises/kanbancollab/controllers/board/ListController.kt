@@ -161,6 +161,8 @@ class ListController(private val userRepository: UserRepository,
             return Redirect.to("/board/project/$token")
         }
 
+        val list: KList = listRepository.findById(listId).get()
+
         if (name.isBlank()) {
             errors.add(String.format(AuthController.EMPTY_REQUIRED_FIELD_ERROR,
                                      "Name"))
@@ -168,6 +170,10 @@ class ListController(private val userRepository: UserRepository,
 
         if (!KList.isNameValid(name)) {
             errors.add(KList.INVALID_NAME_LENGTH_ERROR)
+        }
+
+        if (name == list.name) {
+            return Redirect.to("/board/project/$token")
         }
 
         if (this.isListNameAlreadyTaken(name)) {
@@ -181,7 +187,6 @@ class ListController(private val userRepository: UserRepository,
             return Redirect.to("/board/project/$token/$listId/edit")
         }
 
-        val list: KList = listRepository.findById(listId).get()
 
         list.name = name
         listRepository.save(list)
