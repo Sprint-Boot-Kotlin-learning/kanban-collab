@@ -1,0 +1,49 @@
+<div th:replace="/components/views/Header :: header('Edit ' + ${list.getName()} + ' list',
+                                                    'board')"></div>
+<div th:replace="/components/views/Header :: #app"></div>
+
+<header class="board__header">
+    <h1 class="header__user-name"
+        th:text="@{ 'Edit: ' + ${list.getName()} + ' list' }">edit.project.list</h1>
+</header>
+
+<section id="new_project" class="new-project-container">
+    <form class="new-project-container__form"
+          th:action="@{ '/board/project/'
+                        + ${project.getToken()}
+                        + '/'
+                        + ${list.getId()}
+                        + '/edit' }"
+          method="post">
+
+        <div class="error"
+             th:include="/components/Error :: error_container(${errors})"
+             th:if="${errors}"></div>
+
+        <input type="hidden" name="token" th:value="${project.token}" />
+        <input type="hidden" name="listId" th:value="${list.getId()}" />
+
+        <label for="name">
+            <p>
+                Name:
+            </p>
+
+            <input id="name"
+                   type="text"
+                   name="name"
+                   th:value="${list.getName()}"
+                   th:maxlength="${nameMaxLength}"
+                   required />
+        </label>
+
+        <div class="form__actions">
+            <button class="button-primary"
+                    type="submit">
+
+                Save
+            </button>
+        </div>
+    </form>
+</section>
+
+<div th:replace="/components/views/Footer"></div>
