@@ -287,9 +287,9 @@ class ProjectController(private val tableRepository: TableRepository,
                 .findAllByPositionIsGreaterThanEqualAndIdIsNot(
                     list.position, list.id!!)
 
-        for (list: KList in nextLists) {
-            list.position++
-            listRepository.save(list)
+        for (currentList: KList in nextLists) {
+            currentList.position++
+            listRepository.save(currentList)
         }
 
         listRepository.flush()
