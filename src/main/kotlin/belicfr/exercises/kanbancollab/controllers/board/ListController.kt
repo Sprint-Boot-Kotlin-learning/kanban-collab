@@ -1,6 +1,7 @@
 package belicfr.exercises.kanbancollab.controllers.board
 
 import belicfr.exercises.kanbancollab.controllers.Middleware
+import belicfr.exercises.kanbancollab.controllers.auth.AuthController
 import belicfr.exercises.kanbancollab.models.KList
 import belicfr.exercises.kanbancollab.models.KTable
 import belicfr.exercises.kanbancollab.models.KUser
@@ -11,10 +12,14 @@ import belicfr.exercises.kanbancollab.utilities.Redirect
 import jakarta.servlet.http.HttpSession
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
+import org.springframework.ui.set
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.servlet.mvc.support.RedirectAttributes
 import org.springframework.web.servlet.view.RedirectView
 import java.util.Optional
 import java.util.UUID
@@ -116,6 +121,75 @@ class ListController(private val userRepository: UserRepository,
         return Redirect.to("/board/project/$token")
     }
 
+    @GetMapping("/edit", "/edit/")
+    fun renderEditList(@PathVariable("token") token: UUID,
+                       @PathVariable("listId") listId: Long,
+                       model: Model): String {
+
+        if (!this.isProjectExisting(token)) {
+            return "redirect:/board"
+        }
+
+        this.project = tableRepository.findKTableByToken(token) as KTable
+
+        val list: Optional<KList> = listRepository.findById(listId)
+
+        if (!list.isPresent || !this.isListExisting(listId)) {
+            return "redirect:/board/project/$token"
+        }
+
+        model["project"] = this.project
+        model["list"] = list.get()
+        model["nameMaxLength"] = KList.NAME_MAX_LENGTH
+
+        return "Board/Project/Lists/EditList"
+    }
+
+    @PostMapping("/edit", "/edit/")
+    fun editList(@RequestParam("token") token: UUID,
+                 @RequestParam("listId") listId: Long,
+                 @RequestParam("name") name: String,
+                 redirectAttributes: RedirectAttributes): RedirectView {
+
+        val errors: MutableList<String> = arrayListOf()
+
+        if (!this.isProjectExisting(token)) {
+            return Redirect.to("/board")
+        }
+
+        if (!this.isListExisting(listId)) {
+            return Redirect.to("/board/project/$token")
+        }
+
+        if (name.isBlank()) {
+            errors.add(String.format(AuthController.EMPTY_REQUIRED_FIELD_ERROR,
+                                     "Name"))
+        }
+
+        if (!KList.isNameValid(name)) {
+            errors.add(KList.INVALID_NAME_LENGTH_ERROR)
+        }
+
+        if (this.isListNameAlreadyTaken(name)) {
+            errors.add(KList.NAME_ALREADY_TAKEN_ERROR)
+        }
+
+        if (errors.isNotEmpty()) {
+            redirectAttributes.addFlashAttribute("errors",
+                                                 errors)
+
+            return Redirect.to("/board/project/$token/$listId/edit")
+        }
+
+        val list: KList = listRepository.findById(listId).get()
+
+        list.name = name
+        listRepository.save(list)
+        listRepository.flush()
+
+        return Redirect.to("/board/project/$token")
+    }
+
     private fun isProjectExisting(token: UUID): Boolean {
         val projectCountWithGivenToken: Int
             = tableRepository.countAllByToken(token)
@@ -125,5 +199,11 @@ class ListController(private val userRepository: UserRepository,
 
     private fun isUserProjectMember(user: KUser): Boolean
         = this.project.members.any { it == user }
+
+    private fun isListExisting(listId: Long): Boolean
+        = this.project.lists.any { it.id == listId }
+
+    private fun isListNameAlreadyTaken(name: String): Boolean
+        = listRepository.countAllByName(name) > 0
 
 }
