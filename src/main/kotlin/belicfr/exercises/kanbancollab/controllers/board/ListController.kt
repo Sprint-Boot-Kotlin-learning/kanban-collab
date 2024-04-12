@@ -26,8 +26,7 @@ import java.util.UUID
 
 @Controller
 @RequestMapping("/board/project/{token}/{listId}")
-class ListController(private val userRepository: UserRepository,
-                     private val listRepository: ListRepository,
+class ListController(private val listRepository: ListRepository,
                      private val tableRepository: TableRepository,
                      private val session: HttpSession) {
 
@@ -152,12 +151,15 @@ class ListController(private val userRepository: UserRepository,
                  redirectAttributes: RedirectAttributes): RedirectView {
 
         val errors: MutableList<String> = arrayListOf()
+        val user: KUser = session.getAttribute("user") as KUser
 
         if (!this.isProjectExisting(token)) {
             return Redirect.to("/board")
         }
 
-        if (!this.isListExisting(listId)) {
+        if (!this.isListExisting(listId)
+            || !this.isUserProjectMember(user)) {
+
             return Redirect.to("/board/project/$token")
         }
 
@@ -191,6 +193,58 @@ class ListController(private val userRepository: UserRepository,
         list.name = name
         listRepository.save(list)
         listRepository.flush()
+
+        return Redirect.to("/board/project/$token")
+    }
+
+    @GetMapping("/delete", "/delete/")
+    fun renderDeleteList(@PathVariable("token") token: UUID,
+                         @PathVariable("listId") listId: Long,
+                         model: Model): String {
+
+        if (!this.isProjectExisting(token)) {
+            return "redirect:/board"
+        }
+
+        this.project = tableRepository.findKTableByToken(token) as KTable
+
+        val list: Optional<KList> = listRepository.findById(listId)
+
+        if (!list.isPresent || !this.isListExisting(listId)) {
+            return "redirect:/board/project/$token"
+        }
+
+        model["project"] = this.project
+        model["list"] = list.get()
+
+        return "Board/Project/Lists/DeleteList"
+    }
+
+    @PostMapping("/delete", "/delete/")
+    fun deleteList(@RequestParam("token") token: UUID,
+                   @RequestParam("listId") listId: Long): RedirectView {
+
+        val user: KUser = session.getAttribute("user") as KUser
+
+        if (!this.isProjectExisting(token)) {
+            return Redirect.to("/board")
+        }
+
+        this.project = tableRepository.findKTableByToken(token) as KTable
+
+        val list: Optional<KList> = listRepository.findById(listId)
+
+        if (this.isListExisting(listId)
+            && list.isPresent
+            && this.isUserProjectMember(user)) {
+
+            this.project.lists.remove(list.get())
+            tableRepository.save(this.project)
+            tableRepository.flush()
+
+            listRepository.delete(list.get())
+            listRepository.flush()
+        }
 
         return Redirect.to("/board/project/$token")
     }
